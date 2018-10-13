@@ -15,8 +15,31 @@ class Estudiante {
 
   method tieneAprobada(materia) = materiasAprobadas.any({ aprobada => aprobada.materia() == materia })
 
+  method esDeUnaCarrera(materia) = carreras.contains(materia.carrera())
+  
+  method estaInscripto(materia) = materia.alumnosInscriptos().contains(self)
+  
+  method estaEnEspera(materia) = materia.alumnosEnEspera().contains(self)
+  
+  method puedeInscribirse(materia) = materia.tipoDeInscripcion().cumpleCondicion(self, materia)
+
   method puedeCursar(materia) =
-    carreras.contains(materia.carrera()) && !self.tieneAprobada(materia) && !materia.alumnosInscriptos().contains(self) && materia.tipoDeInscripcion().esCumplida(self)
+    self.esDeUnaCarrera(materia) && !self.tieneAprobada(materia) && !self.estaInscripto(materia) && self.puedeInscribirse(materia)
+    
+  method listaParaCursar(carrera) {
+    if (carreras.contains(carrera)) {
+      return carrera.materias().filter({ mat => self.puedeCursar(mat) })
+    }
+    return null
+  }
+  
+  method listaMateriasInscripto() {
+    carreras.forEach({ carrera => carrera.materias().filter({ mat => self.estaInscripto(mat) }) })
+  } 
+  
+  method listaMateriasEnEspera() {
+    carreras.forEach({ carrera => carrera.materias().filter({ mat => self.estaEnEspera(mat) }) })
+  }
   
 }
 

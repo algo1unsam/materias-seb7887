@@ -2,15 +2,17 @@ class PorCorrelatividad {
 
   const property correlatividades = []
 
-  method esCumplida(estudiante) = correlatividades.all({ materia => estudiante.tieneAprobada(materia) })
+  method cumpleCondicion(estudiante, materia) = correlatividades.all({ mat => estudiante.tieneAprobada(mat) })
 
 }
 
 class PorAnio {
   
-  const property anioAnterior = []
+  method anioAnterior(materia) {
+    return materia.carrera().materias().filter({ mat => mat.anio() == (materia.anio() - 1) })
+  }
   
-  method esCumplida(estudiante) = anioAnterior.all({ materia => estudiante.tieneAprobada(materia) })
+  method cumpleCondicion(estudiante, materia) = self.anioAnterior(materia).all({ mat => estudiante.tieneAprobada(mat) })
   
 }
 
@@ -18,13 +20,13 @@ class PorCreditos {
 
   const cantidadDeCreditos = 0
 
-  method esCumplida(estudiante) = estudiante.creditosAcumulados() > cantidadDeCreditos
+  method cumpleCondicion(estudiante, materia) = estudiante.creditosAcumulados() > cantidadDeCreditos
 
 }
 
 object sinCondicion {
 
-  method esCumplida(estudiante) = true
+  method cumpleCondicion(estudiante, materia) = true
 
 }
 

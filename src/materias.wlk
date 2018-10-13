@@ -1,6 +1,7 @@
 class Materia {
   const property cupo = 0
   const property carrera = null
+  const property anio = 0
   const property tipoDeInscripcion = null
   var alumnosInscriptos = []
   var alumnosEnEspera = []
